@@ -17,9 +17,16 @@ def get_version():
     return m.group(1)
 
 if platform.architecture()[0] == '32bit':
+  if platform.architecture()[1] == 'WindowsPE':
+    extra_link_args = ['/LIBPATH:../lib32', 'libxl.lib']
+  else:
     extra_link_args = ['-L../lib', '-lxl', '-Wl,-rpath,../lib']
 else:
+  if platform.architecture()[1] == 'WindowsPE':
+    extra_link_args = ['/LIBPATH:../lib64', 'libxl.lib']
+  else:
     extra_link_args = ['-L../lib64', '-lxl', '-Wl,-rpath,../lib64']
+
 
 module = Extension('libxlpy'
         , sources = [
